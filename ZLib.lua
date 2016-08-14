@@ -289,6 +289,24 @@ function ZLib.round(a_num,a_decimal)
   return math.floor(a_num) % 10 < 5 and math.floor(a_num/10)/a_decimal or math.ceil(a_num/10)/a_decimal
 end
 
+--[[
+--=======================================Creates an __Index metamethod out of multiple __Index metamethods
+--Makes a lot of classes into one, essentially.--]]
+function ZLib.multiIndexer(...)
+  obj = {...}
+  return function(t,a_key)
+    for _,v in ipairs(obj) do
+      if type(v) == "table" then
+        if v[a_key] ~= nil then return v[a_key] end
+      elseif type(v) == "function" then
+        local test = v(a_tab,a_key)
+        if test ~= nil then return test end
+      end
+    end
+    return nil
+  end
+end
+
 
 
 
